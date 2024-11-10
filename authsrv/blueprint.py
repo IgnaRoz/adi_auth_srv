@@ -1,4 +1,5 @@
 """Authentication Service: blue print of the API."""
+import json
 from flask import Blueprint, current_app, Response
 
 ApiMock = Blueprint('authorization_service', __name__)
@@ -17,3 +18,8 @@ def live_probe() -> Response:
 def is_authorized(auth_code: str) -> Response:
     """Check auth_code."""
     return VALID if current_app.config['service'].is_authorized(auth_code) else INVALID
+@ApiMock.route(f'{API_ROOT}/user/<username>', methods=('GET',))
+def get_user(username: str) -> Response:
+    """Get user info."""
+    user,roles = current_app.config['service'].get_user(username)
+    return Response(json.dumps({"username":user,"roles":roles}), status=200) if user else INVALID
