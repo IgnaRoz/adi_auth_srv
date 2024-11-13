@@ -9,12 +9,12 @@ VALID = Response('', status=204)
 INVALID = Response('Not found', status=404)
 
 
-@ApiMock.route(f'{API_ROOT}/alive', methods=('GET',))
+@ApiMock.route(f'{API_ROOT}/status', methods=('GET',))
 def live_probe() -> Response:
     """Use to make probes."""
     return Response('', status=204)
 
-@ApiMock.route(f'{API_ROOT}/is_authorized/<auth_code>', methods=('GET',))
+@ApiMock.route(f'{API_ROOT}/auth/<auth_code>', methods=('GET',))
 def is_authorized(auth_code: str) -> Response:
     """Check auth_code."""
     return VALID if current_app.config['service'].is_authorized(auth_code) else INVALID
