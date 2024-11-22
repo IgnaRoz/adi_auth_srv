@@ -17,9 +17,10 @@ def live_probe() -> Response:
 @ApiMock.route(f'{API_ROOT}/auth/<auth_code>', methods=('GET',))
 def is_authorized(auth_code: str) -> Response:
     """Check auth_code."""
-    return VALID if current_app.config['service'].is_authorized(auth_code) else INVALID
+    roles = ['admin']
+    return Response(json.dumps({"roles":roles}), status=200, content_type='application/json') if current_app.config['service'].is_authorized(auth_code) else INVALID
 @ApiMock.route(f'{API_ROOT}/user/<username>', methods=('GET',))
 def get_user(username: str) -> Response:
     """Get user info."""
     user,roles = current_app.config['service'].get_user(username)
-    return Response(json.dumps({"username":user,"roles":roles}), status=200) if user else INVALID
+    return Response(json.dumps({"username":user,"roles":roles}), status=200, content_type='application/json') if user else INVALID
